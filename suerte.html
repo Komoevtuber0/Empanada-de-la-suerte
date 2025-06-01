@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La Empanada de la Suerte</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f7d9aa, #f5c56b);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #6a4c24;
+      margin-bottom: 20px;
+    }
+    #formulario {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input {
+      width: 200px;
+    }
+    button {
+      background-color: #6a4c24;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #8b5e2e;
+    }
+    #circulo {
+      width: 150px;
+      height: 150px;
+      background-color: #fff3e0;
+      border: 4px dashed #6a4c24;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #circulo:hover {
+      transform: scale(1.1);
+    }
+    #mensajeContainer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 80%;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff8e1;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #categoria {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #6a4c24;
+    }
+    #mensaje {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ La Empanada de la Suerte ✨</h1>
+  <div id="formulario">
+    <input type="text" id="nombre" placeholder="Ingresa tu nombre">
+    <button onclick="iniciarExperiencia()">Siguiente</button>
+  </div>
+  <div id="circulo" onclick="mostrarMensaje()">Saber mi suerte</div>
+  <div id="mensajeContainer">
+    <div id="categoria"></div>
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    const fechaHoy = new Date().toISOString().split('T')[0];
+    let nombreUsuario = "";
+    const frases = {
+      amor: [
+        "Hoy es un buen día para abrir tu corazón a nuevas experiencias.",
+        "El amor está más cerca de lo que crees, mantén la mente abierta.",
+        "No busques tanto afuera, lo importante está dentro de ti.",
+        "Alguien está pensando en ti, aunque no lo notes todavía.",
+        "El amor propio es la clave para recibir amor verdadero.",
+        "Hoy, el amor puede venir en forma de un gesto pequeño.",
+        "Deja que la paciencia guíe tus relaciones, todo llegará a su tiempo.",
+        "Una sonrisa tuya puede cambiar el día de alguien.",
+        "El amor es como una planta: riégalo con cuidado.",
+        "Escucha tu intuición, sabe más de lo que crees."
+      ],
+      suerte: [
+        "Una sorpresa inesperada tocará tu puerta hoy.",
+        "La suerte está de tu lado, aprovecha las oportunidades.",
+        "Hoy es el día perfecto para arriesgarte en algo pequeño.",
+        "El universo está conspirando a tu favor.",
+        "A veces, la suerte se esconde en los detalles más simples.",
+        "Un número especial podría traerte suerte, ¿cuál será?",
+        "Lo que das, vuelve multiplicado.",
+        "La buena suerte se cultiva con buenas intenciones.",
+        "Hoy, un giro inesperado podría traer algo positivo.",
+        "No subestimes el poder de tus pensamientos positivos."
+      ],
+      dinero: [
+        "Una pequeña recompensa económica se acerca a ti.",
+        "Hoy es buen día para organizar tus finanzas.",
+        "Ahorrar un poco hoy traerá tranquilidad mañana.",
+        "Recuerda: la riqueza no solo es material.",
+        "Un regalo inesperado podría mejorar tu día.",
+        "Una nueva oportunidad laboral está por aparecer.",
+        "El esfuerzo constante siempre es recompensado.",
+        "Valora lo que tienes, eso atraerá más.",
+        "Una buena idea puede ser más valiosa que el oro.",
+        "La clave está en invertir en ti mismo."
+      ],
+      salud: [
+        "Escucha a tu cuerpo, necesita un descanso.",
+        "La salud es tu mayor tesoro, cuídala con amor.",
+        "Hoy es un buen día para comenzar un nuevo hábito saludable.",
+        "Un paseo corto puede alegrar tu día.",
+        "A veces, menos es más: respira profundo.",
+        "No olvides hidratarte bien, tu cuerpo te lo agradecerá.",
+        "Dedica tiempo a lo que te hace feliz, es salud también.",
+        "Pequeños cambios traen grandes resultados.",
+        "Cuida tu mente tanto como tu cuerpo.",
+        "Hoy, el equilibrio es la clave para tu bienestar."
+      ]
+    };
+
+    function iniciarExperiencia() {
+      const nombre = document.getElementById('nombre').value.trim();
+      if (!nombre) return alert('Ingresa tu nombre.');
+      nombreUsuario = nombre;
+
+      const claveIntentos = `intentos-${nombre}-${fechaHoy}`;
+      const intentosGuardados = localStorage.getItem(claveIntentos);
+
+      if (intentosGuardados) {
+        alert("Ya has usado tu suerte hoy. Vuelve mañana.");
+        document.getElementById('formulario').style.display = 'none';
+        document.getElementById('circulo').style.display = 'none';
+        document.getElementById('mensajeContainer').style.display = 'flex';
+        document.getElementById('categoria').innerText = "🚫 Acceso restringido";
+        document.getElementById('mensaje').innerText = "Solo puedes usar la empanada una vez al día. Vuelve mañana para descubrir tu suerte.";
+        return;
+      }
+
+      document.getElementById('formulario').style.display = 'none';
+      document.getElementById('circulo').style.display = 'flex';
+    }
+
+    function mostrarMensaje() {
+      const categorias = Object.keys(frases);
+      const categoriaElegida = categorias[Math.floor(Math.random() * categorias.length)];
+      const frasesCategoria = frases[categoriaElegida];
+      const fraseElegida = frasesCategoria[Math.floor(Math.random() * frasesCategoria.length)];
+
+      document.getElementById('circulo').style.display = 'none';
+      document.getElementById('mensajeContainer').style.display = 'flex';
+      document.getElementById('categoria').innerText = `🌟 Categoría: ${categoriaElegida.toUpperCase()}`;
+      document.getElementById('mensaje').innerText = fraseElegida;
+
+      const claveIntentos = `intentos-${nombreUsuario}-${fechaHoy}`;
+      localStorage.setItem(claveIntentos, true);
+    }
+  </script>
+</body>
+</html>
